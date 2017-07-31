@@ -53,6 +53,10 @@
             "Description": "Docker Image to use in CodeBuild Project",
             "Type": "String"
         },
+        "GithubToken": {
+            "Description": "GitHub API Token used for Status creation.",
+            "Type": "String"
+        },
         "ProjectName": {
             "AllowedPattern": "^[a-zA-Z0-9-_]*$",
             "Description": "Name to give the CodeBuild Project. For this sample, just the same name as the repository that you are connecting to.",
@@ -336,6 +340,13 @@
                     }
                 },
                 "Description": "Connects GitHub to CodeBuild for CI",
+                "Environment": {
+                    "Variables": {
+                        "GITHUB_TOKEN": {
+                            "Ref": "GithubToken"
+                        }
+                    }
+                },
                 "FunctionName": "CodeBuild-CI-Sample",
                 "Handler": "index.handler",
                 "MemorySize": 128,
