@@ -7,13 +7,14 @@ import sys
 
 
 def handler(event, context):
+    print(event)
     if event:
 
         token = os.environ['GITHUB_TOKEN']
         gh = login(token=token)
 
         # Check if request is from GitHub
-        elif 'body' in event:
+        if 'body' in event:
             body = event['body']
             if type(body) is str:
                 body = json.loads(body)
@@ -42,7 +43,7 @@ def handler(event, context):
                 }
 
         # Check if request is from CloudWatch Event
-        if 'detail-type' in event:
+        elif 'detail-type' in event:
             project = body['project']
             build_id = body['id'].split('/')[1]
             status = body['status']

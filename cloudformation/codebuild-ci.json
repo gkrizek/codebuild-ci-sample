@@ -13,7 +13,7 @@
                         },
                         ".execute-api.",
                         {
-                            "Ref": "AWS:Region"
+                            "Ref": "AWS::Region"
                         },
                         ".amazonaws.com/",
                         "v1"
@@ -59,13 +59,13 @@
         },
         "ProjectName": {
             "AllowedPattern": "^[a-zA-Z0-9-_]*$",
-            "Description": "Name to give the CodeBuild Project. For this sample, just the same name as the repository that you are connecting to.",
+            "Description": "Name to give the CodeBuild Project. For this sample, use the same name as your repository.",
             "MaxLength": "255",
             "MinLength": "2",
             "Type": "String"
         },
         "RepositoryUrl": {
-            "Description": "HTTPS Url of the repository in GitHub. Example: 'https://github.com/owner/repo.git'",
+            "Description": "HTTPS Clone URL of the repository in GitHub. Example: 'https://github.com/owner/repo.git'",
             "Type": "String"
         },
         "S3Bucket": {
@@ -141,6 +141,16 @@
             },
             "Type": "AWS::ApiGateway::Method"
         },
+        "ApiPermission": {
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "FunctionName": {
+                    "Ref": "LambdaFunction"
+                },
+                "Principal": "apigateway.amazonaws.com"
+            },
+            "Type": "AWS::Lambda::Permission"
+        },
         "ApiResource": {
             "Properties": {
                 "ParentId": {
@@ -182,7 +192,8 @@
                                 {
                                     "Action": [
                                         "logs:Put*",
-                                        "lambda:Invoke"
+                                        "lambda:Invoke*",
+                                        "iam:PassRole"
                                     ],
                                     "Effect": "Allow",
                                     "Resource": "*"
@@ -252,7 +263,8 @@
                             "Effect": "Allow",
                             "Principal": {
                                 "Service": [
-                                    "codebuild.amazonaws.com"
+                                    "codebuild.amazonaws.com",
+                                    "events.amazonaws.com"
                                 ]
                             }
                         }
@@ -416,9 +428,7 @@
                             "Statement": [
                                 {
                                     "Action": [
-                                        "logs:CreateLogGroup",
-                                        "logs:CreateLogStream",
-                                        "logs:PutLogEvents"
+                                        "logs:*"
                                     ],
                                     "Effect": "Allow",
                                     "Resource": "arn:aws:logs:*:*:*"
