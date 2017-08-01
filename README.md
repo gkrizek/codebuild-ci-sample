@@ -1,15 +1,13 @@
 # Using AWS CodeBuild as a CI Service with GitHub
 
-[AWS CodeBuild](https://aws.amazon.com/codebuild/) is a fully manage build service that offers continuous scaling, metered pricing, and flexibility. This repository is an example application to integrate CodeBuild with GitHub. This project will allow you to run tests or builds on every pull request automatically using CodeBuild.
-
-[See our associated blog article](https://link_to_article)
+[AWS CodeBuild](https://aws.amazon.com/codebuild/) is a fully managed build service that offers continuous scaling, metered pricing, and flexibility. This repository is an example application to integrate CodeBuild with GitHub. This project will allow you to run builds on every pull request automatically using CodeBuild. [_See our associated blog article here._](https://link_to_article)
 
 #### Advantages of CodeBuild
 
 - Metered pricing (pay for build time, not subscription)
-- Free Tier for testing
-- Default 20 concurrent builds limit
-- Unlimited build minutes
+- Free Tier eligible
+- Default limit of 20 concurrent builds
+- Unlimited build minutes per month
 - Integration into other AWS Services
 
 ![](images/example-status.png)
@@ -18,11 +16,11 @@
 
 The included CloudFormation template creates:
 
-- IAM Roles for Lambda Function, CodeBuild Project, and API Gateway
 - Lambda Function
 - API Gateway
 - CodeBuild Project
 - CloudWatch Event Rule
+- IAM Roles for Lambda Function, CodeBuild Project, and API Gateway
 
 _All of these service are [Free Tier](https://aws.amazon.com/free/) eligible_
 
@@ -40,7 +38,7 @@ This will output a zip file called `codebuild-ci-lambda.zip`. Upload that to any
 
 **Step 2: Get API Token**
 
-We must get an API token to authenticate to GitHub. We will reference this in our CloudFormation template so Lambda function can create Statuses.
+We must get an API token to authenticate with GitHub. We will reference this in our CloudFormation template so our Lambda function can create Statuses.
 
 To create an API token [See the GitHub documentation.](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/)
 
@@ -50,7 +48,7 @@ _Creating a [GitHub App](https://developer.github.com/apps/) or something simila
 
 We can now create our infrastructure in AWS. I have provided a CloudFormation template in this repository that creates everything required.
 
-Choose _Deploy to AWS_ to launch the template in your account.
+Click _Deploy to AWS_ to launch the template in your account.
 
 Region | Launch Template
 ------------ | -------------
@@ -70,6 +68,7 @@ The template has the follow Parameters:
 
 Once you have created your infrastructure via CloudFormation, navigate to the **Outputs** tab in your CloudFormation Stack. There will be an Output called "WebhookUrl". This is your API Gateway endpoint to use in GitHub. Copy this for use in the next step.
 
+_In this template, we are passing the GitHub API Token into Lambda via an Environment Variable. While this is good for keep it out of code, you should encrypt this value if you plan to use this sample beyond testing. Possible solutions are [Encryption Helpers](http://docs.aws.amazon.com/lambda/latest/dg/tutorial-env_console.html) or [Parameter Store](http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)._
 
 **Step 4: Setup GitHub**
 
