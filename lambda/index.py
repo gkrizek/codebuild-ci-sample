@@ -19,6 +19,13 @@ def handler(event, context):
             if type(body) is str:
                 body = json.loads(body)
 
+            # Respond if it's GitHub's Webhook Test
+            if 'hook' in body:
+                return {
+                    'statusCode': 200,
+                    'body': 'It Works!'
+                }
+
             repo = body['pull_request']['base']['repo']['name']
             owner = body['pull_request']['base']['repo']['owner']['login']
             head_sha = body['pull_request']['head']['sha']
@@ -44,16 +51,16 @@ def handler(event, context):
 
         # Check if request is from CloudWatch Event
         elif 'detail-type' in event:
-            project = body['project']
-            build_id = body['id'].split('/')[1]
-            status = body['status']
+            project = event['detail']['project-name']
+            build_id = event['detail']['build-id'].split('/')[1]
+            status = event['detail']['build-status']
             state = {
                 "FAILED": 'failure',
                 "STOPPED": 'error',
                 "SUCCEEDED": 'success'
             }
             build = codebuild.batch_get_builds(
-                ids=[Id]
+                ids=[build_id]
             )
             sha = build['builds'][0]['sourceVersion']
             owner = build['builds'][0]['source']['location'].split('/')[3]

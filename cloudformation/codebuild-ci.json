@@ -2,8 +2,8 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "CodeBuild CI Sample",
     "Outputs": {
-        "ApiUrl": {
-            "Description": "API Gateway Public Endpoint",
+        "WebhookUrl": {
+            "Description": "URL for GitHub Webhook",
             "Value": {
                 "Fn::Join": [
                     "",
@@ -16,7 +16,8 @@
                             "Ref": "AWS::Region"
                         },
                         ".amazonaws.com/",
-                        "v1"
+                        "v1",
+                        "/webhook"
                     ]
                 ]
             }
@@ -280,6 +281,7 @@
                                     "Action": [
                                         "events:Put*",
                                         "logs:Put*",
+                                        "logs:Create*",
                                         "s3:Put*",
                                         "lambda:Invoke*"
                                     ],
@@ -448,6 +450,22 @@
                 "Name": "codebuild-ci-sample"
             },
             "Type": "AWS::ApiGateway::RestApi"
+        },
+        "StatusPermission": {
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "FunctionName": {
+                    "Ref": "LambdaFunction"
+                },
+                "Principal": "events.amazonaws.com",
+                "SourceArn": {
+                    "Fn::GetAtt": [
+                        "CodeBuildStatus",
+                        "Arn"
+                    ]
+                }
+            },
+            "Type": "AWS::Lambda::Permission"
         }
     }
 }
