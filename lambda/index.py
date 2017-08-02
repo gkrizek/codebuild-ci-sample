@@ -1,13 +1,12 @@
 import boto3
-codebuild = boto3.client('codebuild')
 from github3 import login
 import os
 import json
 import sys
+codebuild = boto3.client('codebuild')
 
 
 def handler(event, context):
-    print(event)
     if event:
 
         token = os.environ['GITHUB_TOKEN']
