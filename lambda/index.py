@@ -65,7 +65,7 @@ def handler(event, context):
             sha = build['builds'][0]['sourceVersion']
             owner = build['builds'][0]['source']['location'].split('/')[3]
             repository = gh.repository(owner, project)
-            status = repository.create_status(
+            result = repository.create_status(
               sha=sha,
               state=state[status],
               target_url="https://us-west-2.console.aws.amazon.com/codebuild/home?region=us-west-2#/builds/" + build_id + "/view/new",
@@ -74,7 +74,7 @@ def handler(event, context):
             )
             return {
                 'statusCode': 200,
-                'body': status
+                'body': str(result)
             }
 
         else:
