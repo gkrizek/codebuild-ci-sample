@@ -88,7 +88,7 @@ _In this template, we are passing the GitHub API Token into Lambda via an Enviro
 
 **Step 5: Setup GitHub**
 
-Now we can navigate to our repository in GitHub and go to the Settings page. Under the "Webhooks" section, we can click _Add webhook_ in the upper right. Here we can paste in the https url for our API Gateway endpoint that we grabbed from Step 2. Change the _content-type_ to `application/json`.
+Now we can navigate to our repository in GitHub and go to the Settings page. Under the "Webhooks" section, we can click _Add webhook_ in the upper right. Here we can paste in the https url for our API Gateway endpoint that we grabbed from Step 4. Change the _content-type_ to `application/json`.
 
 Under the _Which events would you like to trigger this webhook?_ heading, select the "Let me select individual events." option. Then check the `Pull Request` box and deselect the `Push` box. Make sure the 'Active' box is checked then click "Add webhook".
 
