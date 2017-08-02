@@ -44,7 +44,23 @@ To create an API token [See the GitHub documentation.](https://help.github.com/a
 
 _Creating a [GitHub App](https://developer.github.com/apps/) or something similar is best practice. We are using a personal token to easily run this sample. Personal tokens are not recommended in production._
 
-**Step 3: Create Infrastructure**
+**Step 3: Link CodeBuild to GitHub**
+
+_If you have used CodeBuild with GitHub previously you can skip this step_
+
+We must authenticate CodeBuild to our GitHub account so it can see our repositories. It requires read only access in order to pull code during a run.
+
+1. Login to your AWS Account and go to the CodeBuild Console.
+2. If you have never used CodeBuild, click the "Get Started". If you have used it before, click "Create Project".
+3. Under the heading **"Source: What to build"**, select `GitHub` as your _Source provider_.
+4. Click the button that says **"Connect to GitHub"**
+5. Allow CodeBuild access to your repositories. Then you should get redirected back to the CodeBuild page.
+6. Click "Cancel" at the very bottom.
+
+We can just cancel out of our project creation because our CloudFormation project will create the project for us. We simply needed to establish an OAuth relationship with CodeBuild.
+
+
+**Step 4: Create Infrastructure**
 
 We can now create our infrastructure in AWS. I have provided a CloudFormation template in this repository that creates everything required.
 
@@ -70,7 +86,7 @@ Once you have created your infrastructure via CloudFormation, navigate to the **
 
 _In this template, we are passing the GitHub API Token into Lambda via an Environment Variable. While this is good for keep it out of code, you should encrypt this value if you plan to use this sample beyond testing. Possible solutions are [Encryption Helpers](http://docs.aws.amazon.com/lambda/latest/dg/tutorial-env_console.html) or [Parameter Store](http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)._
 
-**Step 4: Setup GitHub**
+**Step 5: Setup GitHub**
 
 Now we can navigate to our repository in GitHub and go to the Settings page. Under the "Webhooks" section, we can click _Add webhook_ in the upper right. Here we can paste in the https url for our API Gateway endpoint that we grabbed from Step 2. Change the _content-type_ to `application/json`.
 
@@ -82,7 +98,7 @@ You should then see a green checkmark by your webhook url.
 
 _To learn more about adding webhooks to a repository, [see the GitHub documentation](https://developer.github.com/webhooks/creating/)_
 
-**Step 5: Open a Pull Request**
+**Step 6: Open a Pull Request**
 
 That should be all we need! To try it out, simply open a new pull request in your repository. You should see a Status of `pending` appear with a link to CodeBuild. The Status will be updated once the build completes. A build will be triggered whenever a pull request is Opened, Reopened, or Synchronized (pushed to).
 
