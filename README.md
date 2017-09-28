@@ -1,6 +1,6 @@
-# Using AWS CodeBuild as a CI Service with GitHub
+# Using AWS CodeBuild as a CI Service in GitHub
 
-[AWS CodeBuild](https://aws.amazon.com/codebuild/) is a fully managed build service that offers continuous scaling, metered pricing, and flexibility. This repository is an example application to integrate CodeBuild with GitHub. This project will allow you to run builds on every pull request automatically using CodeBuild. [_See our associated blog article here._](https://link_to_article)
+[AWS CodeBuild](https://aws.amazon.com/codebuild/) is a fully managed build service that offers flexibility, continuous scaling, and metered pricing. This repository is an example application to integrate CodeBuild with GitHub. This project will allow you to run builds on every pull request automatically using CodeBuild.
 
 #### Advantages of CodeBuild
 
