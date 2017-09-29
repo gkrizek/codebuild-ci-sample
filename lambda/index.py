@@ -13,13 +13,13 @@ def handler(event, context):
         gh = login(token=token)
 
         # Check if request is from GitHub
-        if 'body' in event:
+        if 'X-GitHub-Event' in event['headers']:
             body = event['body']
             if type(body) is str:
                 body = json.loads(body)
 
             # Respond if it's GitHub's Webhook Test
-            if 'hook' in body:
+            if event['headers']['X-GitHub-Event'] == 'ping':
                 return {
                     'statusCode': 200,
                     'body': 'It Works!'
@@ -45,7 +45,7 @@ def handler(event, context):
                 )
                 return {
                     'statusCode': 200,
-                    'body': "Created Status - ID: " + str(status.id)
+                    'body': "Created Status 'pending' - ID: " + str(status.id)
                 }
 
         # Check if request is from CloudWatch Event
@@ -73,7 +73,7 @@ def handler(event, context):
             )
             return {
                 'statusCode': 200,
-                'body': str(result)
+                'body': "Created Status '" + state[status] + "' - ID: " + str(result.id)
             }
 
         else:
