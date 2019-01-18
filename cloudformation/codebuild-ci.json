@@ -175,19 +175,7 @@
                                     ],
                                     "Effect": "Allow",
                                     "Resource": {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:codebuild:us-west-2:",
-                                                {
-                                                    "Ref": "AWS::AccountId"
-                                                },
-                                                ":project/",
-                                                {
-                                                    "Ref": "ProjectName"
-                                                }
-                                            ]
-                                        ]
+                                        "Fn::Sub": "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}"
                                     }
                                 }
                             ],
@@ -311,7 +299,11 @@
                         "Fn::Join": [
                             "",
                             [
-                                "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                                "arn:aws:apigateway:",
+                                {
+                                  "Ref": "AWS::Region"
+                                },
+                                ":lambda:path/2015-03-31/functions/",
                                 {
                                     "Fn::GetAtt": [
                                         "LambdaFunction",
